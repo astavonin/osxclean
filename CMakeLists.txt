@@ -16,7 +16,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY
         ${PROJECT_BINARY_DIR}/lib CACHE PATH "Single Directory for all")
 
-option(BUILD_SHARED_LIBS "shared" OFF)
+option(BUILD_SHARED_LIBS OFF)
 set(Boost_USE_STATIC_LIBS ON)
 
 enable_testing()

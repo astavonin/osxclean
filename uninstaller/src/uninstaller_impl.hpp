@@ -7,10 +7,11 @@ namespace uninstaller
 class uninstaller_impl : public uninstaller
 {
 public:
-    uninstaller_impl();
+    uninstaller_impl( const std::string &filter, filter_type type,
+                      bool isRegexp );
     virtual ~uninstaller_impl();
 
     virtual void                uninstall() override;
-    virtual std::vector<object> do_dry_run() override;
+    virtual std::vector<object> dry_run() override;
 };
 }

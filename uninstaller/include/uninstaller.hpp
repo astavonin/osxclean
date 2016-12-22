@@ -24,7 +24,7 @@ public:
     virtual ~uninstaller(){}
 
     virtual void                uninstall() = 0;
-    virtual std::vector<object> do_dry_run() = 0;
+    virtual std::vector<object> dry_run() = 0;
 };
 
 enum class filter_type

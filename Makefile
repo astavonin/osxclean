@@ -4,12 +4,12 @@ MKDIR := mkdir -p
 BUILD_DIR ?= build
 ROOT_DIR := $(CURDIR)
 
-release: BUILD_TYPE=Release
-release: ./$(BUILD_DIR)/Makefile
-	@ $(MAKE) -C $(BUILD_DIR) -j8
-
 debug: BUILD_TYPE=Debug
 debug: ./$(BUILD_DIR)/Makefile
+	@ $(MAKE) -C $(BUILD_DIR) -j8
+
+release: BUILD_TYPE=Release
+release: ./$(BUILD_DIR)/Makefile
 	@ $(MAKE) -C $(BUILD_DIR) -j8
 
 all: ./$(BUILD_DIR)/Makefile

@@ -7,12 +7,17 @@ endif()
 set(PROJECT_NAME uninstaller)
 project(${PROJECT_NAME})
 
-find_package(Boost REQUIRED)
+find_package(Boost COMPONENTS
+    filesystem
+    REQUIRED)
 
 set(${PROJECT_NAME}_sources
-    src/uninstaller_impl.cpp)
+    src/uninstaller_impl.cpp
+    src/plist.mm)
 
 add_library(${PROJECT_NAME} ${${PROJECT_NAME}_sources})
+target_link_libraries(${PROJECT_NAME} ${Boost_FILESYSTEM_LIBRARY}
+    "-framework Foundation")
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 14)
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
