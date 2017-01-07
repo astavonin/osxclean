@@ -1,7 +1,6 @@
-#include "uninstaller_impl.hpp"
-#include <boost/filesystem.hpp>
+#include <uninstaller.h>
 
-namespace fs = boost::filesystem;
+#include "app_uninstaller.hpp"
 
 namespace uninstaller
 {
@@ -9,24 +8,9 @@ std::unique_ptr<uninstaller> create_uninstaller( const std::string &filter,
                                                  filter_type        type,
                                                  bool               isRegexp )
 {
-    return std::make_unique<uninstaller_impl>( filter, type, isRegexp );
-}
+    if( type != filter_type::app_path_name )
+        throw std::invalid_argument( "Unsupported uninstaller" );
 
-uninstaller_impl::uninstaller_impl( const std::string &filter, filter_type type,
-                                    bool isRegexp )
-{
-}
-
-uninstaller_impl::~uninstaller_impl()
-{
-}
-
-void uninstaller_impl::uninstall()
-{
-}
-
-std::vector<object> uninstaller_impl::dry_run()
-{
-    return std::vector<object>();
+    return std::make_unique<app_uninstaller>( filter );
 }
 }

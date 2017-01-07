@@ -11,8 +11,8 @@ BOOST_AUTO_TEST_CASE( plist_load )
     BOOST_REQUIRE_EQUAL( pl.get_value( "CFBundleIdentifier" ),
                          "com.valvesoftware.steam" );
 
-    uninstaller::plist pl_err( "./wrong_path.plist" );
-    BOOST_REQUIRE_EQUAL( pl_err.items_count(), 0 );
+    BOOST_CHECK_THROW( uninstaller::plist( "./wrong_path.plist" ),
+                       std::runtime_error );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

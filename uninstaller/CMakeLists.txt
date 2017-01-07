@@ -13,6 +13,7 @@ find_package(Boost COMPONENTS
 
 set(${PROJECT_NAME}_sources
     src/uninstaller_impl.cpp
+    src/app_uninstaller.cpp
     src/plist.mm)
 
 add_library(${PROJECT_NAME} ${${PROJECT_NAME}_sources})

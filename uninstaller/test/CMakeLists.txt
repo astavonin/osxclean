@@ -5,6 +5,8 @@ find_package (Boost COMPONENTS unit_test_framework system filesystem REQUIRED)
 
 set(${PROJECT_NAME}_source
     plist_tests.cpp
+    uninstaller_base_tests.cpp
+    app_uninstaller_tests.cpp
     main.cpp
     )
 

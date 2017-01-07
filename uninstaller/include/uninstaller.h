@@ -1,13 +1,17 @@
 #pragma once
 
+#include <boost/filesystem.hpp>
 #include <string>
 #include <vector>
+
+namespace fs = boost::filesystem;
 
 namespace uninstaller
 {
 enum class object_type
 {
     file,
+    directory,
     package,
     application
 };
@@ -15,16 +19,18 @@ enum class object_type
 struct object
 {
     object_type type;
-    std::string name;
+    fs::path    name;
 };
 
 class uninstaller
 {
 public:
-    virtual ~uninstaller(){}
+    virtual ~uninstaller()
+    {
+    }
 
     virtual void                uninstall() = 0;
-    virtual std::vector<object> dry_run() = 0;
+    virtual std::vector<object> dry_run()   = 0;
 };
 
 enum class filter_type
@@ -34,6 +40,6 @@ enum class filter_type
 };
 
 std::unique_ptr<uninstaller> create_uninstaller( const std::string &filter,
-                                                filter_type        type,
-                                                bool               isRegexp );
+                                                 filter_type        type,
+                                                 bool               isRegexp );
 }
