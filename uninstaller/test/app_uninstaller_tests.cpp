@@ -42,4 +42,30 @@ BOOST_AUTO_TEST_CASE( viber_test )
     }
 }
 
+BOOST_AUTO_TEST_CASE( vlc_test )
+{
+    std::vector<std::string> expected{
+        "/Applications/VLC.app",
+        "Library/Application Support/VLC",
+        "Library/Caches/org.videolan.vlc",
+        "Library/Preferences/org.videolan.vlc",
+        "Library/Saved Application State/org.videolan.vlc.savedState",
+        "Library/Application Support/org.videolan.vlc"};
+
+    app_uninstaller un( "/Applications/VLC.app" );
+    auto            actual = un.dry_run();
+
+    BOOST_CHECK_EQUAL( expected.size(), actual.size() );
+
+    for( auto e : expected )
+    {
+        if( std::find_if( actual.begin(), actual.end(), [&]( auto a ) {
+                return a.name.string().find( e ) != std::string::npos;
+            } ) == actual.end() )
+        {
+            BOOST_ERROR( format( "Unable to find %1%" ) % e );
+        }
+    }
+}
+
 BOOST_AUTO_TEST_SUITE_END()

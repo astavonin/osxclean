@@ -1,11 +1,13 @@
 #include "app_uninstaller.hpp"
 
+#include <boost/algorithm/string.hpp>
 #include <boost/format.hpp>
 #include <iostream>
 
 #include "plist.h"
 
 using boost::format;
+using boost::algorithm::to_lower_copy;
 
 namespace uninstaller
 {
@@ -32,24 +34,26 @@ std::vector<object> app_uninstaller::dry_run()
     auto pl =
         plist( ( fs::path( m_app_name ) /= "Contents/Info.plist" ).string() );
 
-    auto app_name    = pl.get_value( "CFBundleName" );
-    auto app_id      = pl.get_value( "CFBundleIdentifier" );
+    auto app_name    = to_lower_copy( pl.get_value( "CFBundleName" ) );
+    auto app_id      = to_lower_copy( pl.get_value( "CFBundleIdentifier" ) );
     auto search_dirs = std::vector<std::string>(
         {"Library/Application Support", "Library/Caches",
-         "Library/Saved Application State",
+         "Library/Saved Application State", "Library/Preferences",
          "Library/Caches/com.crashlytics.data"} );
 
     static const char *home = getenv( "HOME" );
-    for( auto s_dir : search_dirs )
+    for( auto dir : search_dirs )
     {
-        for( auto it : fs::directory_iterator( fs::absolute( s_dir, home ) ) )
+        for( auto it : fs::directory_iterator( fs::absolute( dir, home ) ) )
         {
-            auto name    = it.path().filename().string();
+            auto name    = to_lower_copy( it.path().filename().string() );
             bool matches = name.find( app_name ) != std::string::npos ||
                            name.find( app_id ) != std::string::npos;
             if( matches )
+            {
                 to_delete.push_back(
                     object{object_type::directory, it.path()} );
+            }
         }
     }
 
