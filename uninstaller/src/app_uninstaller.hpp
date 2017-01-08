@@ -10,8 +10,8 @@ public:
     app_uninstaller( const std::string &app_name );
     virtual ~app_uninstaller();
 
-    virtual void                uninstall() override;
-    virtual std::vector<object> dry_run() override;
+    virtual objects_list uninstall( const objects_list &objs ) override;
+    virtual objects_list dry_run() override;
 
 private:
     std::string m_app_name;

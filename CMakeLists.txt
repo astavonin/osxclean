@@ -19,6 +19,8 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY
 option(BUILD_SHARED_LIBS OFF)
 set(Boost_USE_STATIC_LIBS ON)
 
+include_directories("./externals/cxx-prettyprint")
+
 enable_testing()
 
 #add_subdirectory( osxclean )
