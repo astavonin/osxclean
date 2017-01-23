@@ -23,5 +23,5 @@ include_directories("./externals/cxx-prettyprint")
 
 enable_testing()
 
-#add_subdirectory( osxclean )
+add_subdirectory( osxclean )
 add_subdirectory( uninstaller )

@@ -3,6 +3,7 @@
 #include <boost/exception/all.hpp>
 #include <boost/format.hpp>
 #include <boost/test/unit_test.hpp>
+#include <fstream>
 #include <iostream>
 #include <prettyprint.hpp>
 #include <vector>
@@ -38,13 +39,14 @@ BOOST_AUTO_TEST_CASE( viber_test )
          "Library/Caches/com.crashlytics.data/com.viber.osx",
          "Library/Saved Application State/com.viber.osx.savedState",
          "Library/Caches/com.viber.osx",
+         "Library/Preferences/com.viber.osx.plist",
          "Library/Application Support/com.viber.osx"} ) );
 
     app_uninstaller un( "/Applications/Viber.app" );
     auto            actual = un.dry_run();
     std::sort( actual.begin(), actual.end() );
 
-    std::vector<std::string> diff;
+    objects_list diff;
     std::set_symmetric_difference( expected.begin(), expected.end(),
                                    actual.begin(), actual.end(),
                                    std::back_inserter( diff ) );
@@ -67,7 +69,7 @@ BOOST_AUTO_TEST_CASE( vlc_test )
     auto            actual = un.dry_run();
     std::sort( actual.begin(), actual.end() );
 
-    std::vector<std::string> diff;
+    objects_list diff;
     std::set_symmetric_difference( expected.begin(), expected.end(),
                                    actual.begin(), actual.end(),
                                    std::back_inserter( diff ) );
@@ -76,11 +78,30 @@ BOOST_AUTO_TEST_CASE( vlc_test )
                                       << "\nDifference: " << diff );
 }
 
-// BOOST_AUTO_TEST_CASE( remove_test )
-//{
-// BOOST_REQUIRE( fs::create_directory("dir1") );
-// BOOST_REQUIRE( fs::create_directory("dir1/subdir1") );
-// BOOST_REQUIRE( fs::create_directory("dir2") );
-//}
+BOOST_AUTO_TEST_CASE( remove_test )
+{
+    BOOST_REQUIRE( fs::create_directory( "dir1" ) );
+    BOOST_REQUIRE( fs::create_directory( "dir1/subdir1" ) );
+    BOOST_REQUIRE( fs::create_directory( "dir2" ) );
+
+    {
+        std::ofstream f( "dir1/test.txt" );
+        BOOST_REQUIRE( f.is_open() );
+        f << "some data";
+    }
+    {
+        std::ofstream f( "dir2/test.txt" );
+        BOOST_REQUIRE( f.is_open() );
+        f << "some data";
+    }
+    fs::permissions( "dir2/test.txt", fs::remove_perms | fs::owner_write |
+                                          fs::group_write | fs::others_write );
+
+    objects_list    to_delete( {"dir1", "dir2"} );
+    app_uninstaller un( "/Applications/VLC.app" );  // any name is Ok here
+    auto            access_errors = un.uninstall( to_delete );
+
+    BOOST_CHECK( access_errors.size() == 0 );
+}
 
 BOOST_AUTO_TEST_SUITE_END()
