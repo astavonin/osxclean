@@ -1,10 +1,10 @@
 #pragma once
 
-#include <uninstaller.h>
+#include "uninstaller_impl.hpp"
 
 namespace uninstaller
 {
-class app_uninstaller : public uninstaller
+class app_uninstaller : public uninstaller_base
 {
 public:
     app_uninstaller( const std::string &app_name );

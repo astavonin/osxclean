@@ -3,7 +3,6 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/format.hpp>
 #include <iostream>
-#include <iostream>
 
 #include "plist.h"
 
@@ -24,26 +23,6 @@ app_uninstaller::app_uninstaller( const std::string &app_name )
 
 app_uninstaller::~app_uninstaller()
 {
-}
-
-objects_list app_uninstaller::uninstall( const objects_list &objs )
-{
-    objects_list undeleted;
-
-    for( auto obj : objs )
-    {
-        try
-        {
-            fs::remove_all( obj );
-        }
-        catch( fs::filesystem_error &er )
-        {
-            std::cerr << er.what() << std::endl;
-            undeleted.push_back( obj );
-        }
-    }
-
-    return undeleted;
 }
 
 objects_list app_uninstaller::dry_run()
